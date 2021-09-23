@@ -1,13 +1,13 @@
 cask "ferdi-beta" do
-  version "5.6.1-beta.1"
+  version "5.6.2"
 
   if Hardware::CPU.intel?
-    sha256 "f1d7773f4b08b8acf00c49957484c2042ad2f8614233fc8aed3210a385b7522b"
+    sha256 "bfad74f6b22364f8ee80a3faf1b386707e76949c5eea68a47df11d298ee0bbc8"
 
     url "https://github.com/getferdi/ferdi/releases/download/v#{version}/Ferdi-#{version}.dmg",
         verified: "github.com/getferdi/ferdi/"
   else
-    sha256 "7811447b3cf52340a0bfc3823c328f51a57d756963c14babbc7365fc179ecdb1"
+    sha256 "51dfa80046037bd53b3ace758b29b8a8f809b7493388cbcf96a408895ea089ea"
 
     url "https://github.com/getferdi/ferdi/releases/download/v#{version}/Ferdi-#{version}-arm64.dmg",
         verified: "github.com/getferdi/ferdi/"
@@ -18,8 +18,9 @@ cask "ferdi-beta" do
   homepage "https://getferdi.com/"
 
   livecheck do
-    url :url
-    regex(/^v?(\d+(?:\.\d+)+[._-]beta[._-]\d+)$/i)
+    url "https://github.com/getferdi/ferdi/releases/"
+    strategy :page_match
+    regex(/Ferdi[._-](\d+(?:\.\d+)*((?:[._-]beta)?)*([._-]\d+)?)\.dmg/i)
   end
 
   auto_updates true

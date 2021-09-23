@@ -1,6 +1,6 @@
 cask "qt-creator-dev" do
-  version "4.15.0-rc1"
-  sha256 "02a1dcdc0c8d607b8b8a4493573871fd5832909984d6e73e2226f8a6e2f92437"
+  version "5.0.0-rc1"
+  sha256 "6b209b776d850f07c8719475a3f90765dc1ea637acd659414bcf9967df600941"
 
   url "https://download.qt.io/development_releases/qtcreator/#{version.major_minor}/#{version}/qt-creator-opensource-mac-x86_64-#{version}.dmg"
   name "Qt Creator Dev"
@@ -10,9 +10,15 @@ cask "qt-creator-dev" do
   livecheck do
     url "https://download.qt.io/development_releases/qtcreator/"
     strategy :page_match do |page|
-      version_major_minor = page[%r{href="(\d+(?:\.\d+)*)/"}i, 1]
-      version_page = Net::HTTP.get(URI.parse("https://download.qt.io/development_releases/qtcreator/#{version_major_minor}/"))
-      version_page[%r{href="(\d+(?:\.\d+)*-(?:rc|beta)\d*)/"}i, 1]
+      versions = page.scan(%r{href=["']?v?(\d+(?:\.\d+)+)/?["' >]}i).flatten.uniq.sort_by { |v| Version.new(v) }
+      newest_major_minor = versions.last
+      next if newest_major_minor.blank?
+
+      # Fetch the directory listing page for the newest version
+      version_page = Homebrew::Livecheck::Strategy.page_content(URI.join(@url, "#{newest_major_minor}/").to_s)
+      next if version_page[:content].blank?
+
+      version_page[:content].scan(%r{href=["']?v?(\d+(?:\.\d+)+[._-](?:alpha|beta|rc)\d*)/?["' >]}i).map(&:first)
     end
   end
 

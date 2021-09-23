@@ -1,11 +1,11 @@
 cask "termius-beta" do
-  version "7.18.3"
+  version "7.21.1"
   sha256 :no_check
 
   if Hardware::CPU.intel?
-    url "https://www.termius.com/beta/download/mac/Termius+Beta.dmg"
+    url "https://autoupdate.termius.com/mac-beta/Termius%20Beta.dmg"
   else
-    url "https://www.termius.com/beta/download/mac-arm64/Termius+Beta.dmg"
+    url "https:///autoupdate.termius.com/mac-beta-arm64/Termius+Beta.dmg"
   end
 
   name "Termius Beta"
@@ -20,11 +20,11 @@ cask "termius-beta" do
   app "Termius Beta.app"
 
   zap trash: [
-    "~/.termius",
-    "~/Library/Application Support/Termius Beta",
-    "~/Library/Saved Application State/com.termius-beta.mac.savedState",
     "/Library/Preferences/com.termius-beta.mac.helper.plist",
     "/Library/Preferences/com.termius-beta.mac.plist",
+    "~/.termius",
+    "~/Library/Application Support/Termius Beta",
     "~/Library/Logs/Termius Beta",
+    "~/Library/Saved Application State/com.termius-beta.mac.savedState",
   ]
 end
